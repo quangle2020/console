@@ -1,0 +1,32 @@
+server:
+  port: 8888
+#  servlet:
+#    context-path: /products
+
+spring:
+  datasource:
+    first:
+      url: ${URL:jdbc:postgresql://localhost:5432/products?useSSL=false}
+      username: ${USER_NAME:postgres}
+      password: ${PASSWORD:mydb123456}
+    second:
+      url: ${SECOND_URL:jdbc:postgresql://localhost:5432/postgres?useSSL=false}
+      username: ${USER_NAME:postgres}
+      password: ${PASSWORD:mydb123456}
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+  servlet:
+    multipart:
+      max-file-size: 11150MB
+      max-request-size: 11150MB
+
+file:
+  rootDirectory: ${ROOT_DIRECTORY:file:/file-stores}
+  templateDirectory: ${TEMPLATE_DIRECTORY:file:/file-stores/template}
+  publicDirectory: ${PUBLIC_DIRECTORY:file:/file-stores/public}
+  privateDirectory: ${PRIVATE_DIRECTORY:file:/file-stores/private}
+
+
