@@ -8,11 +8,11 @@ spring:
     first:
       url: ${URL:jdbc:postgresql://localhost:5432/products?useSSL=false}
       username: ${USER_NAME:postgres}
-      password: ${PASSWORD:mydb123456}
+      password: ${PASSWORD:}
     second:
       url: ${SECOND_URL:jdbc:postgresql://localhost:5432/postgres?useSSL=false}
       username: ${USER_NAME:postgres}
-      password: ${PASSWORD:mydb123456}
+      password: ${PASSWORD:}
     driver-class-name: org.postgresql.Driver
   jpa:
     hibernate:

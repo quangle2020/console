@@ -65,8 +65,6 @@ public class TransactionsServiceImpl {
 
     public void createExcelFromDataInDb() throws IOException {
 
-        long startTime = System.currentTimeMillis();
-
         // Get data in DB
 //        List<Transactions> transactionsList = transactionsRepository.findAll();
         List<Transactions> transactionsList = transactionsRepositoryImpl.getTransactions();
@@ -78,6 +76,8 @@ public class TransactionsServiceImpl {
         InputStream inputStream = Files.newInputStream(templatePath);
 
         Workbook workbook = new XSSFWorkbook(inputStream);
+
+        long startTime = System.currentTimeMillis();
 
         Sheet sheet = workbook.getSheetAt(0);
 
@@ -117,7 +117,7 @@ public class TransactionsServiceImpl {
         long stopTime = System.currentTimeMillis();
         long elapsedTime = stopTime - startTime;
 
-        System.out.println("--> Tong thoi gian xu ly: "+ elapsedTime/1000+"s");
+        System.out.println("--> Tong thoi gian xu ly: " + elapsedTime / 1000 + "s");
     }
 
     private Row createRow(Sheet sheet, Integer index) {
@@ -139,24 +139,27 @@ public class TransactionsServiceImpl {
 
     public String testExcel() throws IOException {
         SXSSFWorkbook wb = new SXSSFWorkbook(-1); // turn off auto-flushing and accumulate all rows in memory
-        Sheet sh = wb.createSheet();
-        for (int rownum = 0; rownum < 500000; rownum++) {
-            Row row = sh.createRow(rownum);
-            for (int cellnum = 0; cellnum < 10; cellnum++) {
-                Cell cell = row.createCell(cellnum);
-                String address = new CellReference(cell).formatAsString();
-                cell.setCellValue(address);
-            }
-            // manually control how rows are flushed to disk
-            if (rownum % 100 == 0) {
-                ((SXSSFSheet) sh).flushRows(100); // retain 100 last rows and flush all others
-                // ((SXSSFSheet)sh).flushRows() is a shortcut for ((SXSSFSheet)sh).flushRows(0),
-                // this method flushes all rows
+        for (int i = 0; i < 3; i++) {
+
+            Sheet sh = wb.createSheet();
+            for (int rownum = 0; rownum < 1000000; rownum++) {
+                Row row = sh.createRow(rownum);
+                for (int cellnum = 0; cellnum < 10; cellnum++) {
+                    Cell cell = row.createCell(cellnum);
+                    String address = new CellReference(cell).formatAsString();
+                    cell.setCellValue(address);
+                }
+                // manually control how rows are flushed to disk
+                if (rownum % 100 == 0) {
+                    ((SXSSFSheet) sh).flushRows(100); // retain 100 last rows and flush all others
+                    // ((SXSSFSheet)sh).flushRows() is a shortcut for ((SXSSFSheet)sh).flushRows(0),
+                    // this method flushes all rows
+                }
             }
         }
 
         String fileName = "\\" + UUID.randomUUID().toString()
-                + "-" + DateUtil.convertDateToString(new Date()).replace(" ","");
+                + "-" + DateUtil.convertDateToString(new Date()).replace(" ", "");
 
         return filesService.writeExcelFile(wb,
                 filesConfig.getRootDirectory(),

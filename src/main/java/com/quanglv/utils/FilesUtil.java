@@ -49,6 +49,7 @@ public class FilesUtil {
         try {
             out = new FileOutputStream(fileLocation);
             wb.write(out);
+            wb.close();
             out.close();
 
             size = new File(fileLocation).length();
